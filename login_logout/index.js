@@ -33,7 +33,7 @@ function showFormLogin() {
                                 <a class="" href="#">Quên mật khẩu</a>
                             </div>
                             <hr>
-                        <div class="col-12 col-md-12 text-center">
+                        <div class="col-12 col-md-12 mt-4 text-center">
                             <button class="btn btn-success btn-lg text-opacity-50" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">Tạo tài khoản mới
                             </button>
@@ -63,31 +63,32 @@ function showFormLogin() {
                     <div class="modal-body">
                         <div class="modal-body-main">
                             <div class="form-group">
-                                    <input type="text" class="form-control" id="nameRegister"  placeholder="Tên">
-                                    <p></p>
+                                    <input type="text"  class="input-box" id="nameRegister"  placeholder="Tên">
+                                    <p id="name-status"></p>
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control" id="emailRegister" onchange="checkUsername()" placeholder="Tên tài khoản" required>
-                                <p id="name-status"></p>
+                                <input type="email" class="input-box" id="emailRegister"  placeholder="Tên tài khoản" required>
+                                <p id="user-status"></p>
                             </div>
                             <div class="form-group">
                                 <div class="form-password">
-                                    <input type="password" placeholder="Mật khẩu mới" id="passwordRegister" name="psw"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"title="Phải chứa ít nhất một số và một chữ hoa và chữ thường và ít nhất 6 ký tự trở lên" required>
+                                    <input type="password" class="input-box" placeholder="Mật khẩu mới" id="passwordRegister" name="psw"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"title="Phải chứa ít nhất một số và một chữ hoa và chữ thường và ít nhất 6 ký tự trở lên" required>
                                     <i id="eye-register" class="fa-solid fa-eye" style="margin-right: 10px"></i>
                                     <p></p>
                                 </div>
                             </div>
                             
-                            <div class="row my-4">
-                                <div class="form-group">
+                            
+                                <div class="form-group  my-4">
                                 <label for="exampleFormControlSelect1">Giới tính</label>
-                                <select class="form-control" id="genderRegister">
+                                <select class="input-box" id="genderRegister" value="Giới tính">
+                                  <option selected>Giới tính </option>
                                   <option>Nam</option>
                                   <option>Nữ</option>
                                   <option>Khác</option>
                                 </select>
                               </div>
-                            </div>
+                          
                             <small style="font-size: 12px;font-weight: 500;" >Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. <a href="">Tìm hiểu thêm</a>. 
                             </br>    
                             Bằng cách nhấp vào Đăng ký, bạn đồng ý với <a href=""> Điều khoản</a>,<a href=""> Chính sách quyền riêng tư</a> và <a href=""> Chính sách cookie</a> của chúng tôi. Bạn có thể nhận được thông báo của chúng tôi qua SMS và hủy nhận bất kỳ lúc nào.
@@ -151,9 +152,17 @@ function register() {
       "Content-Type": "application/json",
     },
     data: JSON.stringify(user),
-    success(message) {
-      alert(message);
-      $("#exampleModal").modal("hide");
+    success: function(data) {
+      if(data.exists) {
+        $("#nameRegister").css('border-color','red')
+        $("#name-status").text('Tài khoản đã tồn tại!');
+      }else {
+        $("#nameRegister").css('border-color','')
+        $("#name-status").css('color','blue')
+        $("#name-status").text('Có thể sử dụng tên này');
+      }
+      // alert(message);
+      // $("#exampleModal").modal("hide");
     },
   });
 }

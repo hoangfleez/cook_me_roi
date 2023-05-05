@@ -1,5 +1,5 @@
 function showHomePage() {
- let html =`
+  let html = `
  <div><link rel="stylesheet" href="./home/home.css"></div>
  <nav>
  <div class="nav-center">
@@ -442,5 +442,5 @@ function showHomePage() {
 </div>
 
 <script src="./home/home.js" ></script> `;
-$("#body").html(html);
+  $("#body").html(html);
 }
