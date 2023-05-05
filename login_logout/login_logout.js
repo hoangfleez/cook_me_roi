@@ -12,7 +12,7 @@ pwEye.onclick = () => {
 
 // ----------------------------------------------------------------
 let pwEyeRegister = document.getElementById('eye-register');
-let inputPwRegister = document.getElementById('psw');
+let inputPwRegister = document.getElementById('passwordRegister');
 pwEyeRegister.onclick = () => {
     let typeInputPw = inputPwRegister.getAttribute('type');
     let typeNew = (typeInputPw === 'password') ? 'text' : 'password';
@@ -82,38 +82,3 @@ myInput.onkeyup = function() {
     }
 }
 
-
-let htmlOptionsYear = '';
-let year = new Date();
-for (let i = year.getFullYear(); i >= 1905 ; i--) {
-    htmlOptionsYear += `<option value="${i}">${i}</option>`
-}
-document.getElementById('year').innerHTML = htmlOptionsYear
-
-
-function updateDays() {
-    const monthSelect = document.getElementById('month');
-    const daySelect = document.getElementById('day');
-    const selectedMonth = parseInt(monthSelect.value);
-    let daysInMonth;
-    
-    // Tính số ngày trong tháng
-    if (selectedMonth === 2) {  
-        const currentYear = new Date().getFullYear();
-        daysInMonth = (currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0 ? 29 : 28;
-    } else if (selectedMonth === 4 || selectedMonth === 6 || selectedMonth === 9 || selectedMonth === 11) {
-        daysInMonth = 30;
-    } else {
-        daysInMonth = 31;
-    }
-    
-    // Cập nhật các option của ô select ngày
-    let htmlOptionsDay = '';
-    for (let i = 1; i <= daysInMonth; i++) {
-        htmlOptionsDay += `<option value="${i}">${i}</option>`;
-    }
-    daySelect.innerHTML = htmlOptionsDay;
-    }
-    
-  // Khởi tạo ô select ngày với số ngày trong tháng hiện tại
-    updateDays();
