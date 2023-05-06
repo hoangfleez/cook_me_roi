@@ -1,5 +1,11 @@
 function showFormLogin() {
   let html = `
+  <div>    <link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+  crossorigin="anonymous"
+/></div>
  <div><link rel="stylesheet" href="./login_logout/login_logout.css"></div>
  <div class="body">
     <div class="row">
@@ -26,9 +32,13 @@ function showFormLogin() {
                                     <i id="sp-pw-eye" class="fa-solid fa-eye-slash"></i>
                                 </span>
                             </div>
-
-                            <button class="btn btn-primary col-12 col-md-12 btn-lg mt-4 mb-4" type="button" onclick="login()">Đăng nhập
+                            <div class=" mt-2" style="height: 25px;" >
+                              <span id="login-status" style="color: red"></span> 
+                            </div>
+                            <div class=" mt-2 mb-2">
+                              <button class="btn btn-primary col-12 col-md-12 btn-lg" type="button" onclick="login()">Đăng nhập
                             </button>
+                            </div>
                             <div class="col-12 col-md-12 text-center mt-2">
                                 <a class="" href="#">Quên mật khẩu</a>
                             </div>
@@ -126,10 +136,12 @@ function login() {
     },
     data: JSON.stringify(user),
     success(data) {
-     console.log(1);
-      console.log(data);
-      localStorage.setItem("authorization", data);
-      showHomePage();
+      if(data.message){
+        $('#login-status').text(data.message);
+      }else{
+        showHomePage();
+        localStorage.setItem("authorization", data);
+      }
     },
   });
 }
@@ -152,17 +164,9 @@ function register() {
       "Content-Type": "application/json",
     },
     data: JSON.stringify(user),
-    success: function(data) {
-      if(data.exists) {
-        $("#nameRegister").css('border-color','red')
-        $("#name-status").text('Tài khoản đã tồn tại!');
-      }else {
-        $("#nameRegister").css('border-color','')
-        $("#name-status").css('color','blue')
-        $("#name-status").text('Có thể sử dụng tên này');
-      }
-      // alert(message);
-      // $("#exampleModal").modal("hide");
+    success: function(message) {
+      alert(message);
+      $("#exampleModal").modal("hide");
     },
   });
 }
