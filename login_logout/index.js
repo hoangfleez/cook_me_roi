@@ -62,7 +62,7 @@ function showFormLogin() {
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content" >
                     <div class="modal-header">
                         <div class="modal-header-text">
                             <h2 class="modal-title" id="exampleModalLabel"><b>Đăng ký</b></h2>
@@ -72,32 +72,34 @@ function showFormLogin() {
                     </div>
                     <div class="modal-body">
                         <div class="modal-body-main">
+                        
+                        <form id="modal-validate">
                             <div class="form-group">
                                     <input type="text"  class="input-box" id="nameRegister"  placeholder="Tên">
-                                    <p id="name-status"></p>
+                                    <small id="nameRegister-err" style="font-size:13px"></small>
                             </div>
                             <div class="form-group">
                                 <input type="email" class="input-box" id="emailRegister"  placeholder="Tên tài khoản" required>
-                                <p id="user-status"></p>
+                                <small id="emailRegister-err" style="font-size:13px"></small>
                             </div>
                             <div class="form-group">
                                 <div class="form-password">
-                                    <input type="password" class="input-box" placeholder="Mật khẩu mới" id="passwordRegister" name="psw"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"title="Phải chứa ít nhất một số và một chữ hoa và chữ thường và ít nhất 6 ký tự trở lên" required>
+                                    <input type="password" class="input-box" placeholder="Mật khẩu mới" id="passwordRegister" name="psw"required>
                                     <i id="eye-register" class="fa-solid fa-eye" style="margin-right: 10px"></i>
-                                    <p></p>
                                 </div>
+                                <small id="passwordRegister-err" style="font-size:13px" ></small>
                             </div>
+                        
                             
-                            
-                                <div class="form-group  my-4">
-                                <label for="exampleFormControlSelect1">Giới tính</label>
+                             
+                                
                                 <select class="input-box" id="genderRegister" value="Giới tính">
-                                  <option selected>Giới tính </option>
+                                  <option selected disabled>Giới tính</option>
                                   <option>Nam</option>
                                   <option>Nữ</option>
                                   <option>Khác</option>
                                 </select>
-                              </div>
+                            
                           
                             <small style="font-size: 12px;font-weight: 500;" >Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. <a href="">Tìm hiểu thêm</a>. 
                             </br>    
@@ -107,13 +109,17 @@ function showFormLogin() {
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" onclick="register()">Tạo tài khoản</button>
+                    <button type="button" id="button" class="btn btn-success" register()>Tạo tài khoản</button>
                 </div>  
         </div>
     </div>
 </div>
- <script src="./login_logout/login_logout.js" ></script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+<script src="./login_logout/login_logout.js" ></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
          crossorigin="anonymous"></script>`;
 
@@ -136,9 +142,9 @@ function login() {
     },
     data: JSON.stringify(user),
     success(data) {
-      if(data.message){
-        $('#login-status').text(data.message);
-      }else{
+      if (data.message) {
+        $("#login-status").text(data.message);
+      } else {
         showHomePage();
         localStorage.setItem("authorization", data);
       }
@@ -147,28 +153,91 @@ function login() {
 }
 
 function register() {
-  let email = $("#emailRegister").val();
-  let password = $("#passwordRegister").val();
-  let name = $("#nameRegister").val();
-  let gender = $("#genderRegister").val();
-  let user = {
-    email: email,
-    password: password,
-    name: name,
-    gender: gender,
-  };
-  $.ajax({
-    type: "POST",
-    url: "http://localhost:3000/auth/",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: JSON.stringify(user),
-    success: function(message) {
-      alert(message);
-      $("#exampleModal").modal("hide");
-    },
-  });
+
 }
+ 
 
+$(document).ready(function () {
+  $("#button").on("click",function () {
+      let email = $("#emailRegister").val();
+      let password = $("#passwordRegister").val();
+      let name = $("#nameRegister").val();
+      let gender = $("#genderRegister").val();
 
+      if (email === "" && password === "" && name === "" ){
+        $("#nameRegister-err").text("Tên bạn là gi?").css("color", "red");
+        $("#emailRegister-err").text("Không được để trống!").css("color", "red");
+        $("#passwordRegister-err").text("Không được để trống!") .css("color", "red");
+      }else if (name !== "" && password === "" && email === "" ) {
+        $("#emailRegister-err").text("Không được để trống!").css("color", "red");
+        $("#passwordRegister-err").text("Không được để trống!") .css("color", "red");
+      }else if (name === "" && password !== "" && email === ""){
+        $("#nameRegister-err").text("Tên bạn là gi?").css("color", "red");
+        $("#passwordRegister-err").text("Không được để trống!") .css("color", "red");
+      }else if(name === "" && password === "" && email !== ""){
+        $("#nameRegister-err").text("Tên bạn là gi?").css("color", "red");
+        $("#emailRegister-err").text("Không được để trống!").css("color", "red");
+      }
+      else {
+        $("#nameRegister-err").text("");
+        $("#emailRegister-err").text("");
+        $("#passwordRegister-err").text("");
+      }
+    }
+  );
+  $('#passwordRegister').on('input', function(){
+    let password = $("#passwordRegister").val();
+    let regexPassword = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!regexPassword.test(password)){
+      $("#passwordRegister-err").text("Mật khẩu phải có ít nhất 6 ký tự, 1 số và 1 chữ viết hoa") .css("color", "red");
+    }else{
+      $("#passwordRegister-err").text("");
+    }
+  });
+
+  $('#emailRegister').on('input', function(){
+    let email = $("#emailRegister").val();
+    let regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!regexEmail.test(email)){
+      $("#emailRegister-err").text("Email không hợp lệ").css("color", "red")
+    }else{
+      $("#emailRegister-err").text("");
+    }
+  });
+
+  $('#button').on('click', register = ()=>{
+    let email = $("#emailRegister").val();
+    let password = $("#passwordRegister").val();
+    let name = $("#nameRegister").val();
+    let gender = $("#genderRegister").val();
+    let user = {
+      email: email,
+      password: password,
+      name: name,
+      gender: gender,
+    };
+    if(email.trim()!==""){
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:3000/auth/",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(user),
+        success: function (data) {
+          console.log(data);
+          if(data){
+            $("#emailRegister-err").text(data.messages).css("color", "red")
+            
+          }else{
+            $("#emailRegister-err").text("");
+            $("#exampleModal").modal("hide");
+            return false;
+          }
+          
+        },
+    
+      });
+    }
+  })
+});

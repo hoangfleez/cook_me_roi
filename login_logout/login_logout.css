@@ -65,9 +65,8 @@ h3 {
   border-top: none;
 }
 
-.modal-body-main > .form-group,
-.modal-body-main > select {
-  /* margin-top: 10px; */
+.form-group{
+  height: 60px;
 }
 
 .form-password {
