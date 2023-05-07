@@ -142,8 +142,9 @@ function login() {
     },
     data: JSON.stringify(user),
     success(data) {
-      if (data.message) {
-        $("#login-status").text(data.message);
+      console.log(data);
+      if (data) {
+        $("#login-status").text(data.messages);
       } else {
         showHomePage();
         localStorage.setItem("authorization", data);
@@ -152,9 +153,7 @@ function login() {
   });
 }
 
-function register() {
 
-}
  
 
 $(document).ready(function () {
@@ -226,14 +225,9 @@ $(document).ready(function () {
         data: JSON.stringify(user),
         success: function (data) {
           console.log(data);
-          if(data){
+
             $("#emailRegister-err").text(data.messages).css("color", "red")
-            
-          }else{
-            $("#emailRegister-err").text("");
             $("#exampleModal").modal("hide");
-            return false;
-          }
           
         },
     
