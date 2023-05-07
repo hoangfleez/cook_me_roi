@@ -143,8 +143,8 @@ function login() {
     data: JSON.stringify(user),
     success(data) {
       console.log(data);
-      if (data) {
-        $("#login-status").text(data.messages);
+      if (data.message) {
+        $("#login-status").text(data.message);
       } else {
         showHomePage();
         localStorage.setItem("authorization", data);
