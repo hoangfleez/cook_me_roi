@@ -154,7 +154,7 @@ nav .post-box {
   position: absolute;
   overflow: auto;
   width: 35vw;
-  height: 550px;
+  max-height: 550px;
   top: 75px;
   left: 35%;
   border-radius: 15px;

@@ -1,4 +1,22 @@
-function showHomePage() {
+function getUser() {
+  $.ajax({
+    type: "GET",
+    url: "http://localhost:3000/auth/home",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+    },
+    success(data) {
+      console.log(data,1);
+      showHomePage(data[0])
+    },
+  })
+}
+
+
+
+function showHomePage(user) {
+  console.log(user)
   let html = `
  <div><link rel="stylesheet" href="./home/home.css"></div>
  <nav>
@@ -65,7 +83,7 @@ function showHomePage() {
            alt=""
          />
          <div class="user-name">
-           <span>bawp dun {{name}}</span>
+           <span>${user.name}</span>
            <a href=""> <small> See your profile</small></a>
          </div>
        </div>
@@ -135,27 +153,26 @@ function showHomePage() {
          />
        </div>
        <div class="user-name">
-         <span>bawp dun</span>
+         <span>${user.name}</span>
          <small>public <i class="fa-solid fa-earth-americas"></i> </small>
        </div>
      </div>
      <div class="content">
-       <textarea name="" id=""></textarea>
-       <img
-         src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-         alt=""
-       />
+       <textarea name="" id="" value=""></textarea>
+       <div id="imgDiv" val></div>
        <div class="add">
          <span>Thêm vào bài đăng</span>
-         <a href=""
-           ><i
-             class="fa-duotone fa-image"
-             style="
-               --fa-primary-color: #45b526;
-               --fa-secondary-color: #adbdad;
-             "
-           ></i
-         ></a>
+          <input type="hidden" class="form-control"  name="image"placeholder="image" id="image" />
+            <input
+                style="display:none;"
+                id="upload"
+                type="file"
+                id="fileButton"
+                onchange="uploadImage(event)"
+              />    
+              <label for="upload">
+              <i class="fa-duotone fa-image" style=" --fa-primary-color: #45b526;--fa-secondary-color: #adbdad"></i></label>
+         
        </div>
      </div>
    </div>
@@ -244,7 +261,7 @@ function showHomePage() {
          alt=""
        />
        <div class="top-input-box" id="input-box">
-         <span>Bạn đang nghĩ gì thế?</span>
+         <span>Bạn đang nghĩ gì thế ${user.name}?</span>
        </div>
      </div>
      <div class="bottom">
@@ -445,4 +462,41 @@ function showHomePage() {
   $("#body").html(html);
 }
 
-
+function uploadImage(e) {
+  let fbBucketName = "images";
+  let uploader = document.getElementById("uploader");
+  let file = e.target.files[0];
+  let storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
+  let uploadTask = storageRef.put(file);
+  uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      function (snapshot) {
+        uploader.value =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            break;
+        }
+      },
+      function (error) {
+        switch (error.code) {
+          case "storage/unauthorized":
+            break;
+          case "storage/canceled":
+            break;
+          case "storage/unknown":
+            break;
+        }
+      },
+      function () {
+        let downloadURL = uploadTask.snapshot.downloadURL;
+        console.log(downloadURL)
+        document.getElementById(
+            "imgDiv"
+        ).innerHTML = `<img src="${downloadURL}" alt="" style="width: 500px; height: 200px" >`;
+        document.getElementById("image").value = downloadURL;
+      }
+  );
+}
