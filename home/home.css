@@ -152,9 +152,9 @@ nav .search-box-over {
 nav .post-box {
   display: none;
   position: absolute;
-  overflow: auto;
+  overflow: none;
   width: 35vw;
-  height: 550px;
+  max-height: 550px;
   top: 75px;
   left: 35%;
   border-radius: 15px;

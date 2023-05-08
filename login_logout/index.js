@@ -146,7 +146,7 @@ function login() {
       if (data.message) {
         $("#login-status").text(data.message);
       } else {
-        showHomePage();
+        getUser()
         localStorage.setItem("authorization", data);
       }
     },

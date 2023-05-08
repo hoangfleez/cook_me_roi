@@ -1,4 +1,57 @@
-function showHomePage() {
+function createPost(){
+
+}
+
+
+function getUser(){
+  $.ajax({
+      type: 'GET',
+      url:`http://localhost:3000/auth/home`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      }, 
+      success(data){
+              $.ajax({
+                type: "GET",
+                url:`http://localhost:3000/friend`,
+                  headers:{
+                      "Content-Type": "application/json",
+                      'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+                  }, 
+                  success(friendList){
+
+                    
+
+
+
+                      showHomePage(data[0],friendList);
+                  }
+              })
+      }
+  })
+}
+
+
+function showHomePage(user, friendList) {
+  console.log(user);
+  console.log(friendList);
+  let friendHtml=``
+  friendList.map(item=>{
+    friendHtml+=`<div class="user">
+         <div class="user-avata online">
+           <img
+             src="${item.avatar}"
+             alt=""
+           />
+         </div>
+         <div class="user-name">
+           <h4>${item.name}</h4>
+         </div>
+       </div>`
+  })
+
+
   let html = `
  <div><link rel="stylesheet" href="./home/home.css"></div>
  <nav>
@@ -48,24 +101,24 @@ function showHomePage() {
      <div class="icon-notification"><i class="fa-solid fa-bell"></i></div>
      <div class="icon-user" onclick="settingsMenuToggle()">
        <img
-         src="{{img}}"
+         src="${user.avatar}"
          alt=""
        />
      </div>
    </div>
    <!-- -------------------settings-menu----------------------- -->
    <div class="settings-menu">
-     <div id="dark-btn">
+     <div id="dark-btn" onclick="changeBackground()">
        <span></span>
      </div>
      <div class="settings-menu-inner">
        <div class="user">
          <img
-           src="{{img}}"
+           src="${user.avatar}"
            alt=""
          />
          <div class="user-name">
-           <span>bawp dun {{name}}</span>
+           <span>${user.name}</span>
            <a href=""> <small> See your profile</small></a>
          </div>
        </div>
@@ -123,43 +176,41 @@ function showHomePage() {
        <span>Tạo bài viết</span>
      </div>
      <div class="close" id="closeButton">
-       <i class="fa-duotone fa-circle-xmark"></i>
+       <i class="fa-duotone fa-circle-xmark" onclick="hideModal()"></i>
      </div>
    </div>
    <div class="post-box-center">
      <div class="user">
        <div class="user-avata">
          <img
-           src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+           src="${user.avatar}"
            alt=""
          />
        </div>
        <div class="user-name">
-         <span>bawp dun</span>
+         <span>${user.name}</span>
          <small>public <i class="fa-solid fa-earth-americas"></i> </small>
        </div>
      </div>
      <div class="content">
-       <textarea name="" id=""></textarea>
-       <img
-         src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-         alt=""
-       />
+       <textarea  id="postContent"></textarea>
+       <div id="imgDiv" val></div>
        <div class="add">
          <span>Thêm vào bài đăng</span>
-         <a href=""
-           ><i
-             class="fa-duotone fa-image"
-             style="
-               --fa-primary-color: #45b526;
-               --fa-secondary-color: #adbdad;
-             "
-           ></i
-         ></a>
+          <input type="hidden" class="form-control"  name="image"placeholder="image" id="image" />
+            <input
+            
+                type="file"
+                id="fileButton"
+                onchange="uploadImage(event)"
+              />    
+              <label for="fileButton">
+              <i class="fa-duotone fa-image" style=" --fa-primary-color: #45b526;--fa-secondary-color: #adbdad"></i></label>
+         
        </div>
      </div>
    </div>
-   <div class="post-box-bottom">
+   <div class="post-box-bottom" onclick="createPost()">
      <span>Đăng</span>
    </div>
  </div>
@@ -240,10 +291,10 @@ function showHomePage() {
    <div class="write-post-container">
      <div class="top">
        <img
-         src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+         src="${user.avatar}"
          alt=""
        />
-       <div class="top-input-box" id="input-box">
+       <div class="top-input-box" id="input-box" onclick="showModal()">
          <span>Bạn đang nghĩ gì thế?</span>
        </div>
      </div>
@@ -403,17 +454,7 @@ function showHomePage() {
        </div>
      </div>
      <div class="frends">
-       <div class="user">
-         <div class="user-avata online">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-         </div>
-         <div class="user-name">
-           <h4>bawp dun</h4>
-         </div>
-       </div>
+     ${friendHtml}
        <div class="user">
          <div class="user-avata online">
            <img
@@ -440,9 +481,86 @@ function showHomePage() {
    </div>
  </div>
 </div>
-
-<script src="./home/home.js" ></script> `;
+<script src="./home/home.js" ></script>
+ `;
   $("#body").html(html);
 }
 
+function uploadImage(e) {
+  let fbBucketName = "images";
+  let uploader = document.getElementById("uploader");
+  let file = e.target.files[0];
+  let storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
+  let uploadTask = storageRef.put(file);
+  uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      function (snapshot) {
+        uploader.value =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            break;
+        }
+      },
+      function (error) {
+        switch (error.code) {
+          case "storage/unauthorized":
+            break;
+          case "storage/canceled":
+            break;
+          case "storage/unknown":
+            break;
+        }
+      },
+      function () {
+        let downloadURL = uploadTask.snapshot.downloadURL;
+        console.log(downloadURL);
+        document.getElementById(
+            "imgDiv"
+        ).innerHTML = `<img src="${downloadURL}" alt="" style="width: 450px; height: 180px" >`;
+        document.getElementById("image").value = downloadURL;
+      }
+  );
+}
+
+
+function settingsMenuToggle() {
+  const settingsmenu = document.querySelector(".settings-menu");
+  settingsmenu.classList.toggle("settings-menu-height");
+}
+
+function changeBackground(){
+  const darkBtn = document.getElementById("dark-btn");
+  darkBtn.classList.toggle("dark-btn-on");
+  document.body.classList.toggle("dark-theme");
+  if (localStorage.getItem("theme") == "light") {
+    localStorage.setItem("theme", "dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
+}
+
+
+if (localStorage.getItem("theme") == "light") {
+  darkBtn.classList.remove("dark-btn-on");
+  document.body.classList.remove("dark-theme");
+} else if (localStorage.getItem("theme") == "dark") {
+  darkBtn.classList.add("dark-btn-on");
+  document.body.classList.add("dark-theme");
+} else {
+  localStorage.setItem("theme", "light");
+}
+
+
+function showModal(){
+  const box = document.querySelector(".post-box");
+  box.style.display = "block";
+}
+
+function hideModal(){
+  const box = document.querySelector(".post-box");
+   box.style.display = "none";
+}
 
