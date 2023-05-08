@@ -36,7 +36,7 @@ function showFormLogin() {
                               <span id="login-status" style="color: red"></span> 
                             </div>
                             <div class=" mt-2 mb-2">
-                              <button class="btn btn-primary col-12 col-md-12 btn-lg" type="button" onclick="login()">Đăng nhập
+                              <button class="btn btn-primary col-12 col-md-12 btn-lg" type="button" id="login" onclick="login()">Đăng nhập
                             </button>
                             </div>
                             <div class="col-12 col-md-12 text-center mt-2">
@@ -184,6 +184,14 @@ $(document).ready(function () {
       }
     }
   );
+  $('#nameRegister').on('input', function(){
+    let name = $(this).val();
+    if (name === ""){
+      $("#nameRegister-err").text("Tên bạn là gì?").css("color", "red");
+    }else{
+      $("#nameRegister-err").text("")
+    }
+  });
   $('#passwordRegister').on('input', function(){
     let password = $("#passwordRegister").val();
     let regexPassword = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
