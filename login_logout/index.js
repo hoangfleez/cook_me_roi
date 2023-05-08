@@ -139,7 +139,6 @@ function login() {
     url: "http://localhost:3000/auth/login",
     headers: {
       "Content-Type": "application/json",
-      'Authorization':  'Bearer ' + localStorage.getItem('authorization')
     },
     data: JSON.stringify(user),
     success(data) {
@@ -147,7 +146,7 @@ function login() {
       if (data.message) {
         $("#login-status").text(data.message);
       } else {
-        getUser();
+        getUser()
         localStorage.setItem("authorization", data);
       }
     },
