@@ -48,7 +48,7 @@ function showHomePage() {
      <div class="icon-notification"><i class="fa-solid fa-bell"></i></div>
      <div class="icon-user" onclick="settingsMenuToggle()">
        <img
-         src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+         src="{{img}}"
          alt=""
        />
      </div>
@@ -61,11 +61,11 @@ function showHomePage() {
      <div class="settings-menu-inner">
        <div class="user">
          <img
-           src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+           src="{{img}}"
            alt=""
          />
          <div class="user-name">
-           <span>bawp dun</span>
+           <span>bawp dun {{name}}</span>
            <a href=""> <small> See your profile</small></a>
          </div>
        </div>
@@ -444,3 +444,5 @@ function showHomePage() {
 <script src="./home/home.js" ></script> `;
   $("#body").html(html);
 }
+
+
