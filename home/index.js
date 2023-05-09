@@ -30,7 +30,7 @@ function getUser(){
                         success(postList){
                             console.log(postList)
                           let posts=``
-                          postList.listPost.map(item => {
+                          postList.map(item => {
                             posts+=`<div class="posts">
                             <div class="posts-top">
                               <div class="posts-top-user">
@@ -65,7 +65,7 @@ function getUser(){
                             </div>
                             <div class="posts-bottom" >
                               <div class="posts-bottom-like" onclick="like(${item.id})">
-                                <i class="fa-light fa-thumbs-up" id="like"></i>
+                                <i class="fa-light fa-thumbs-up" id="like-${item.id}"></i>
                                 <span>100</span>
                               </div>
                               <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id}.)">
@@ -613,9 +613,9 @@ if (localStorage.getItem("theme") == "light") {
 
 
 // like comment
-function like(){
+function like(idPost){
 
-  let icon = document.getElementById("like");
+  let icon = document.getElementById(`like-${idPost}`);
   let likes = icon.getAttribute("class");
   let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
   icon.setAttribute("class", newClassLikes)
