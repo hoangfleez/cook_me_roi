@@ -1,5 +1,22 @@
 function createPost(){
-
+    let postContent = $('#postContent').val();
+    let postImage = $(`#image`).val()
+    let post = {
+        postContent:postContent,
+        postImage:postImage
+    }
+    $.ajax({
+        type:'POST',
+        url:`http://localhost:3000/post`,
+        headers:{
+            "Content-Type": "application/json",
+            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+        },
+        data: JSON.stringify(post),
+        success:()=>{
+            getUser()
+        }
+    })
 }
 
 
@@ -28,9 +45,8 @@ function getUser(){
                             'Authorization':  'Bearer ' + localStorage.getItem('authorization')
                         },
                         success(postList){
-                            console.log(postList)
                           let posts=``
-                          postList.listPost.map(item => {
+                          postList.map(item => {
                             posts+=`<div class="posts">
                             <div class="posts-top">
                               <div class="posts-top-user">
