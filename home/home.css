@@ -575,7 +575,7 @@ nav .post-box-bottom {
   margin: 10px 0;
 }
 .body .main-content .post-container .posts-main-img img {
-  padding: 5px;
+  padding: 0px 80px;
   width: 38vw;
   height: 300px;
 }
@@ -708,4 +708,175 @@ nav .post-box-bottom {
   right: 0;
 }
 
+
+.comment-box {
+  display: none;
+  position: fixed;
+  width: 46vw;
+  height: 90vh;
+  background-color: var(--nav-color);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 5px 1000px rgba(55, 53, 55, 0.726);
+  -moz-box-shadow: 0px 0px 5px 1000px rgba(55, 53, 55, 0.726);
+  box-shadow: 0px 0px 5px 1000px rgba(55, 53, 55, 0.726);
+  overflow: hidden;
+}
+.comment-box .top {
+  border-bottom: solid 1px var(--btn-color);
+}
+.comment-box .top-titel {
+  display: flex;
+  padding: 20px 10px;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: 700;
+}
+.comment-box .top-close {
+  position: absolute;
+  right: 15px;
+  top: 20px;
+}
+.comment-box .top-close i {
+  font-size: 35px;
+  cursor: pointer;
+}
+.comment-box .center {
+  display: block;
+  overflow-x: auto;
+  height: 467px;
+}
+.comment-box .center .posts {
+  margin-bottom: 10px;
+  width: 100%;
+  height: auto;
+  background-color: var(--nav-color);
+}
+.comment-box .center .posts-top {
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+  justify-content: space-between;
+}
+.comment-box .center .posts-top-user {
+  display: flex;
+  align-items: flex-start;
+}
+.comment-box .center .posts-top-user-name {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.comment-box .center .posts-top-user-name a {
+  text-decoration: none;
+  color: black;
+}
+.comment-box .center .posts-top-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.comment-box .center .posts-main-text {
+  padding-left: 20px;
+  word-wrap: break-word;
+}
+.comment-box .center .posts-main-img {
+  margin: 10px 0;
+  background-color: black;
+}
+.comment-box .center .posts-main-img img {
+  padding: 0px 200px;
+  width: 100%;
+  height: 300px;
+}
+.comment-box .center .posts-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  padding-top: 10px;
+  border-top: 1px solid black;
+}
+.comment-box .center .posts-bottom-like, .comment-box .center .posts-bottom-cmt, .comment-box .center .posts-bottom-share {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  column-gap: 10px;
+  cursor: pointer;
+}
+.comment-box .center .posts-bottom-like i, .comment-box .center .posts-bottom-cmt i, .comment-box .center .posts-bottom-share i {
+  font-size: 25px;
+}
+.comment-box .center .comments {
+  margin: 30px 20px;
+}
+.comment-box .center .comments .user {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 10px;
+  font-weight: 0;
+  padding: 5px;
+  cursor: pointer;
+}
+.comment-box .center .comments .user-avata img {
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.comment-box .center .comments .user-name {
+  display: flex;
+  flex-direction: column;
+  border: var(--body-color) solid 1px;
+  background-color: var(--body-color);
+  padding: 10px;
+  border-radius: 15px ;
+}
+.comment-box .center .comments .user-name h4 {
+  color: var(--color);
+}
+.comment-box .bottom {
+  background-color: var(--nav-color);
+  display: flex;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: solid 1px var(--color);
+  column-gap: 10px;
+}
+.comment-box .bottom .avata img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.comment-box .bottom .comment {
+  padding: 5px;
+  width: 100%;
+  max-height: 350px;
+  border: 1px solid var(--color);
+  border-radius: 10px;
+}
+.comment-box .bottom .comment textarea {
+  padding-left: 5px;
+  font-size: 20px;
+  width: 100%;
+  max-height: 150px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--color);
+  resize: none;
+}
+.comment-box .bottom .comment ::-webkit-scrollbar {
+  width: 0px;
+}
+.comment-box .bottom .send {
+  display: flex;
+  justify-content: flex-end;
+}
+.comment-box .bottom .send i {
+  padding: 10px 0;
+}
 /*# sourceMappingURL=index.css.map */

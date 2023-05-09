@@ -66,13 +66,21 @@ if (localStorage.getItem("theme") == "light") {
 }
 
 
-function showModal(){
-  const box = document.querySelector(".post-box");
-  box.style.display = "block";
-}
 
-function hideModal(){
-  const box = document.querySelector(".post-box");
-  box.style.display = "none";
-}
 
+
+// like comment
+function like(){
+
+  let icon = document.getElementById("like");
+  let likes = icon.getAttribute("class");
+  let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
+  icon.setAttribute("class", newClassLikes)
+}
+function likeInBox(){
+
+  let icon = document.getElementById("likeInBox");
+  let likes = icon.getAttribute("class");
+  let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
+  icon.setAttribute("class", newClassLikes)
+}

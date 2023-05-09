@@ -54,6 +54,7 @@ function showHomePage(user, friendList) {
 
   let html = `
  <div><link rel="stylesheet" href="./home/home.css"></div>
+ 
  <nav>
  <div class="nav-center">
    <ul>
@@ -214,6 +215,99 @@ function showHomePage(user, friendList) {
      <span>Đăng</span>
    </div>
  </div>
+ <div class="comment-box">
+        <div class="top">
+          <div class="top-titel">Bài viết của ${user.name}</div>
+          <div class="top-close" onclick="closeCommentBox()">
+            <i class="fa-duotone fa-circle-xmark"></i>
+          </div>
+        </div>
+        <div class="center">
+          <div class="posts">
+            <div class="posts-top">
+              <div class="posts-top-user">
+                <img
+                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+                  alt=""
+                />
+                <div class="posts-top-user-name">
+                  <a href=""><span>bawp dun</span></a>
+                  <a href=""
+                    ><small
+                      >Public <i class="fa-solid fa-earth-americas"></i></small
+                  ></a>
+                </div>
+              </div>
+              <div class="posts-top-ntm">
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+            <div class="posts-main">
+              <div class="posts-main-text">
+                <span
+                  >Hôm nay trời đẹp quá
+                  <h1>
+                    asdasadasdasdljsalkjdlajsdlkjasljdlasjdlkjasljdlasjdljasldjasjdljasldjasljdljsaldjasljd
+                  </h1>
+                </span>
+              </div>
+              <div class="posts-main-img">
+                <img
+                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="posts-bottom">
+              <div class="posts-bottom-like" onclick="likeInBox()" >
+                <i class="fa-light fa-thumbs-up" id="likeInBox"></i>
+                <span>100</span>
+              </div>
+              <div class="posts-bottom-cmt" id="comment" onclick="showCommentBox()">
+                <i class="fa-regular fa-message"></i>
+                <span>2</span>
+              </div>
+              <div class="posts-bottom-share">
+                <i class="fa-light fa-share"></i>
+                <span>10</span>
+              </div>
+            </div>
+          </div>
+          <div class="comments">
+            <div class="user">
+              <div class="user-avata ">
+                <img
+                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="user-name">
+                <h4>bawp dun</h4>
+                <div class="text">
+                  sadsad
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="avata">
+            <img
+              src="https://toigingiuvedep.vn/wp-content/uploads/2022/01/anh-meo-cute.jpg"
+              alt=""
+            />
+          </div>
+          <div class="comment">
+            <textarea
+              id=""
+              placeholder="Viết bình luận ..."
+              required
+              height()
+            ></textarea>
+            <div class="send"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
+          </div>
+        </div>
+      </div>
 </nav>
 
 <div class="body">
@@ -320,107 +414,56 @@ function showHomePage(user, friendList) {
    </div>
 
    <div class="post-container">
-     <div class="posts">
-       <div class="posts-top">
-         <div class="posts-top-user">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-           <div class="posts-top-user-name">
-             <a href=""><span>bawp dun</span></a>
-             <a href=""
-               ><small
-                 >Public <i class="fa-solid fa-earth-americas"></i></small
-             ></a>
-           </div>
-         </div>
-         <div class="posts-top-ntm">
-           <i class="fa-solid fa-ellipsis"></i>
-         </div>
-       </div>
-       <div class="posts-main">
-         <div class="posts-main-text">
-           <span
-             >Hôm nay trời đẹp quá
-             <h1>
-               asdasadasdasdljsalkjdlajsdlkjasljdlasjdlkjasljdlasjdljasldjasjdljasldjasljdljsaldjasljd
-             </h1>
-           </span>
-         </div>
-         <div class="posts-main-img">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-         </div>
-       </div>
-       <div class="posts-bottom">
-         <div class="posts-bottom-like">
-           <i class="fa-light fa-thumbs-up"></i>
-           <span>100</span>
-         </div>
-         <div class="posts-bottom-cmt">
-           <i class="fa-regular fa-message"></i>
-           <span>2</span>
-         </div>
-         <div class="posts-bottom-share">
-           <i class="fa-light fa-share"></i>
-           <span>10</span>
-         </div>
-       </div>
-     </div>
-
-     <div class="posts">
-       <div class="posts-top">
-         <div class="posts-top-user">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-           <div class="posts-top-user-name">
-             <a href=""><span>bawp dun</span></a>
-             <a href=""
-               ><small
-                 >Public <i class="fa-solid fa-earth-americas"></i></small
-             ></a>
-           </div>
-         </div>
-         <div class="posts-top-ntm">
-           <i class="fa-solid fa-ellipsis"></i>
-         </div>
-       </div>
-       <div class="posts-main">
-         <div class="posts-main-text">
-           <span
-             >Hôm nay trời đẹp quá
-             <h1>
-               asdasadasdasdljsalkjdlajsdlkjasljdlasjdlkjasljdlasjdljasldjasjdljasldjasljdljsaldjasljd
-             </h1>
-           </span>
-         </div>
-         <div class="posts-main-img">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-         </div>
-       </div>
-       <div class="posts-bottom">
-         <div class="posts-bottom-like">
-           <i class="fa-light fa-thumbs-up"></i>
-           <span>100</span>
-         </div>
-         <div class="posts-bottom-cmt">
-           <i class="fa-regular fa-message"></i>
-           <span>2</span>
-         </div>
-         <div class="posts-bottom-share">
-           <i class="fa-light fa-share"></i>
-           <span>10</span>
-         </div>
-       </div>
-     </div>
+    <div class="posts">
+            <div class="posts-top">
+              <div class="posts-top-user">
+                <img
+                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+                  alt=""
+                />
+                <div class="posts-top-user-name">
+                  <a href=""><span>bawp dun</span></a>
+                  <a href=""
+                    ><small
+                      >Public <i class="fa-solid fa-earth-americas"></i></small
+                  ></a>
+                </div>
+              </div>
+              <div class="posts-top-ntm">
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+            <div class="posts-main">
+              <div class="posts-main-text">
+                <span
+                  >Hôm nay trời đẹp quá
+                  <h1>
+                    asdasadasdasdljsalkjdlajsdlkjasljdlasjdlkjasljdlasjdljasldjasjdljasldjasljdljsaldjasljd
+                  </h1>
+                </span>
+              </div>
+              <div class="posts-main-img">
+                <img
+                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="posts-bottom" >
+              <div class="posts-bottom-like" onclick="like()">
+                <i class="fa-light fa-thumbs-up" id="like"></i>
+                <span>100</span>
+              </div>
+              <div class="posts-bottom-cmt" onclick="showCommentBox()">
+                <i class="fa-regular fa-message"></i>
+                <span>2</span>
+              </div>
+              <div class="posts-bottom-share">
+                <i class="fa-light fa-share"></i>
+                <span>10</span>
+              </div>
+            </div>
+          </div>
    </div>
  </div>
 
