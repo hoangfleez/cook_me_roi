@@ -28,8 +28,9 @@ function getUser(){
                             'Authorization':  'Bearer ' + localStorage.getItem('authorization')
                         },
                         success(postList){
+                            console.log(postList)
                           let posts=``
-                          postList.map(item => {
+                          postList.listPost.map(item => {
                             posts+=`<div class="posts">
                             <div class="posts-top">
                               <div class="posts-top-user">
