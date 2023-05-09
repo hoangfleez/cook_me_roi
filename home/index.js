@@ -194,7 +194,7 @@ function showHomePage(user, friendList) {
        </div>
      </div>
      <div class="content">
-       <textarea  id="postContent"></textarea>
+       <textarea  id="postContent" placeholder="Bạn đang nghĩ gì thế ${user.name}?" value=""></textarea>
        <div id="imgDiv" val></div>
        <div class="add">
          <span>Thêm vào bài đăng</span>
