@@ -64,7 +64,7 @@ function getUser(){
                             </div>
                             <div class="posts-bottom" >
                               <div class="posts-bottom-like" onclick="like(${item.id})">
-                                <i class="fa-light fa-thumbs-up" id="like"></i>
+                                <i class="fa-light fa-thumbs-up" id="icon-like"></i>
                                 <span>100</span>
                               </div>
                               <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id}.)">
@@ -373,12 +373,12 @@ function showHomePage(user, friendList,posts) {
  <!-- -----------------left-sidebar------------------- -->
  <div class="left-sidebar">
    <div class="imp-links">
-     <div class="imp-links-frend">
+     <div class="imp-links-frend" onclick="showFriend()">
        <i
          class="fa-duotone fa-user-group"
          style="--fa-primary-color: #3974db; --fa-secondary-color: #23cbe1"
        ></i>
-       <span>Frend</span>
+       <span>Friend</span>
      </div>
      <div class="imp-links-news">
        <i
@@ -509,28 +509,7 @@ function showHomePage(user, friendList,posts) {
      </div>
      <div class="frends">
      ${friendHtml}
-       <div class="user">
-         <div class="user-avata online">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-         </div>
-         <div class="user-name">
-           <h4>bawp dun</h4>
-         </div>
-       </div>
-       <div class="user">
-         <div class="user-avata online">
-           <img
-             src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-             alt=""
-           />
-         </div>
-         <div class="user-name">
-           <h4>bawp dun</h4>
-         </div>
-       </div>
+       
      </div>
    </div>
  </div>
@@ -607,15 +586,10 @@ if (localStorage.getItem("theme") == "light") {
   localStorage.setItem("theme", "light");
 }
 
-
-
-
-
 // like comment
-function like(){
-
-  let icon = document.getElementById("like");
-  let likes = icon.getAttribute("class");
+function like(id){
+  let icon = document.getElementById(id);
+  let likes = icon.getAttribute(id);
   let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
   icon.setAttribute("class", newClassLikes)
 }
@@ -626,3 +600,5 @@ function likeInBox(){
   let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
   icon.setAttribute("class", newClassLikes)
 }
+
+
