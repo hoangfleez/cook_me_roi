@@ -1,3 +1,14 @@
+function changeLikePost(id) {
+    $.ajax({
+        type: 'Get',
+        url: `http://localhost:3000/like/?id=${id}`,
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+        }, success: function (data) {
+
+        }
+    })
 function createPost(){
     let postContent = $('#postContent').val();
     let postImage = $(`#image`).val()
@@ -20,34 +31,48 @@ function createPost(){
 }
 
 
-function getUser(){
-  $.ajax({
-      type: 'GET',
-      url:`http://localhost:3000/auth/home`,
-      headers:{
-          "Content-Type": "application/json",
-          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-      }, 
-      success(data){
-              $.ajax({
+function getUser() {
+    $.ajax({
+        type: 'GET',
+        url: `http://localhost:3000/auth/home`,
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+        },
+        success(data) {
+            $.ajax({
                 type: "GET",
-                url:`http://localhost:3000/friend`,
-                  headers:{
-                      "Content-Type": "application/json",
-                      'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-                  }, 
-                  success(friendList){
+                url: `http://localhost:3000/friend`,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+                },
+                success(friendList) {
                     $.ajax({
-                      type: "GET",
-                      url:`http://localhost:3000/post`,
-                        headers:{
+                        type: "GET",
+                        url: `http://localhost:3000/post`,
+                        headers: {
                             "Content-Type": "application/json",
-                            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+                            'Authorization': 'Bearer ' + localStorage.getItem('authorization')
                         },
-                        success(postList){
-                          let posts=``
-                          postList.map(item => {
-                            posts+=`<div class="posts">
+                        success(postList) {
+                            $.ajax({
+                                type: "GET",
+                                url: `http://localhost:3000/like/id`,
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+                                },
+                                success: (likes) => {
+                                    console.log(likes)
+                                    let listIdPost = []
+                                    likes.map((like) => {
+                                        listIdPost.push(like.post.id)
+
+                                    })
+                                    let posts = ``;
+                                    postList.map(item => {
+                                        posts += `<div class="posts">
                             <div class="posts-top">
                               <div class="posts-top-user">
                                 <img
@@ -80,9 +105,19 @@ function getUser(){
                               </div>
                             </div>
                             <div class="posts-bottom" >
-                              <div class="posts-bottom-like" onclick="like(${item.id})">
-                                <i class="fa-light fa-thumbs-up" id="like"></i>
-                                <span>100</span>
+                            <div id="like-${item.id}">
+                            ${listIdPost.includes(item.id) ?
+                                            `
+                                <div class="posts-bottom-like"  onclick="unLike(${item.id}, ${item.likes.length})">
+                                <i class="fa-solid fa-thumbs-up" id="like-${item.id}"></i>
+                                 <span>${item.likes.length}</span>
+                                        </div>` :
+                                            `
+                                <div class="posts-bottom-like" onclick="like(${item.id},${item.likes.length})"})">
+                                <i class="fa-light fa-thumbs-up" id="like-${item.id}"></i>
+                                 <span>${item.likes.length}</span>
+                                        </div>
+                                    `}
                               </div>
                               <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id}.)">
                                 <i class="fa-regular fa-message"></i>
@@ -94,27 +129,62 @@ function getUser(){
                               </div>
                             </div>
                           </div>`
-                          })
-                          showHomePage(data[0],friendList,posts);
+                                    })
+                                    showHomePage(data[0], friendList, posts);
+                                }
+                            })
+
                         }
-                    
 
-
-
-                      
-                  })
-              }})
-      }
-  })
+                    })
+                }
+            })
+        }
+    })
 }
 
+function like(id, length) {
+    $.ajax({
+        type: 'POST',
+        url: `http://localhost:3000/like?id=${id}`,
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+        },
+        success: () => {
+            document.getElementById(`like-${id}`).innerHTML = `<div class="posts-bottom-like" onclick="unLike(${id}, ${length})"})">
+                                <i class="fa-solid fa-thumbs-up" id="like-${id}"></i>
+                                 <span>${++length}</span>
+                                        </div>`
 
-function showHomePage(user, friendList,posts) {
-  console.log(user);
-  console.log(friendList);
-  let friendHtml=``
-  friendList.map(item=>{
-    friendHtml+=`<div class="user">
+        }
+    })
+
+}
+
+function unLike(id, length) {
+    $.ajax({
+        type: 'DELETE',
+        url: `http://localhost:3000/like?id=${id}`,
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem('authorization')
+        },
+        success: () => {
+            document.getElementById(`like-${id}`).innerHTML = `<div class="posts-bottom-like"  onclick="like(${id}, ${length})">
+                                <i class="fa-light fa-thumbs-up" id="like-${id}"></i>
+                                 <span>${length}</span>
+                                        </div>`
+        }
+    })
+}
+
+function showHomePage(user, friendList, posts) {
+    console.log(user);
+    console.log(friendList);
+    let friendHtml = ``
+    friendList.map(item => {
+        friendHtml += `<div class="user">
          <div class="user-avata online">
            <img
              src="${item.avatar}"
@@ -125,10 +195,10 @@ function showHomePage(user, friendList,posts) {
            <h4>${item.name}</h4>
          </div>
        </div>`
-  })
+    })
 
 
-  let html = `
+    let html = `
  <div><link rel="stylesheet" href="./home/home.css"></div>
  
  <nav>
@@ -554,92 +624,91 @@ function showHomePage(user, friendList,posts) {
 </div>
 <script src="./home/home.js" ></script>
  `;
-  $("#body").html(html);
+    $("#body").html(html);
 }
 
 function uploadImage(e) {
-  let fbBucketName = "images";
-  let uploader = document.getElementById("uploader");
-  let file = e.target.files[0];
-  let storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
-  let uploadTask = storageRef.put(file);
-  uploadTask.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      function (snapshot) {
-        uploader.value =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED:
-            break;
-          case firebase.storage.TaskState.RUNNING:
-            break;
+    let fbBucketName = "images";
+    let uploader = document.getElementById("uploader");
+    let file = e.target.files[0];
+    let storageRef = firebase.storage().ref(`${fbBucketName}/${file.name}`);
+    let uploadTask = storageRef.put(file);
+    uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        function (snapshot) {
+            uploader.value =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED:
+                    break;
+                case firebase.storage.TaskState.RUNNING:
+                    break;
+            }
+        },
+        function (error) {
+            switch (error.code) {
+                case "storage/unauthorized":
+                    break;
+                case "storage/canceled":
+                    break;
+                case "storage/unknown":
+                    break;
+            }
+        },
+        function () {
+            let downloadURL = uploadTask.snapshot.downloadURL;
+            console.log(downloadURL);
+            document.getElementById(
+                "imgDiv"
+            ).innerHTML = `<img src="${downloadURL}" alt="" style="width: 450px; height: 180px" >`;
+            document.getElementById("image").value = downloadURL;
         }
-      },
-      function (error) {
-        switch (error.code) {
-          case "storage/unauthorized":
-            break;
-          case "storage/canceled":
-            break;
-          case "storage/unknown":
-            break;
-        }
-      },
-      function () {
-        let downloadURL = uploadTask.snapshot.downloadURL;
-        console.log(downloadURL);
-        document.getElementById(
-            "imgDiv"
-        ).innerHTML = `<img src="${downloadURL}" alt="" style="width: 450px; height: 180px" >`;
-        document.getElementById("image").value = downloadURL;
-      }
-  );
+    );
 }
 
 
 function settingsMenuToggle() {
-  const settingsmenu = document.querySelector(".settings-menu");
-  settingsmenu.classList.toggle("settings-menu-height");
+    const settingsmenu = document.querySelector(".settings-menu");
+    settingsmenu.classList.toggle("settings-menu-height");
 }
 
-function changeBackground(){
-  const darkBtn = document.getElementById("dark-btn");
-  darkBtn.classList.toggle("dark-btn-on");
-  document.body.classList.toggle("dark-theme");
-  if (localStorage.getItem("theme") == "light") {
-    localStorage.setItem("theme", "dark");
-  } else {
-    localStorage.setItem("theme", "light");
-  }
+function changeBackground() {
+    const darkBtn = document.getElementById("dark-btn");
+    darkBtn.classList.toggle("dark-btn-on");
+    document.body.classList.toggle("dark-theme");
+    if (localStorage.getItem("theme") == "light") {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
 }
 
 
 if (localStorage.getItem("theme") == "light") {
-  darkBtn.classList.remove("dark-btn-on");
-  document.body.classList.remove("dark-theme");
+    darkBtn.classList.remove("dark-btn-on");
+    document.body.classList.remove("dark-theme");
 } else if (localStorage.getItem("theme") == "dark") {
-  darkBtn.classList.add("dark-btn-on");
-  document.body.classList.add("dark-theme");
+    darkBtn.classList.add("dark-btn-on");
+    document.body.classList.add("dark-theme");
 } else {
-  localStorage.setItem("theme", "light");
+    localStorage.setItem("theme", "light");
 }
-
-
-
 
 
 // like comment
-function like(){
+// function like(idPost, likeData) {
+//     // changeLikePost(idPost)
+//     let icon = document.getElementById(`like-${idPost}`);
+//     let likes = icon.getAttribute("class");
+//     let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
+//     icon.setAttribute("class", newClassLikes)
+// }
 
-  let icon = document.getElementById("like");
-  let likes = icon.getAttribute("class");
-  let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
-  icon.setAttribute("class", newClassLikes)
-}
-function likeInBox(){
 
-  let icon = document.getElementById("likeInBox");
-  let likes = icon.getAttribute("class");
-  let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
-  icon.setAttribute("class", newClassLikes)
+function likeInBox() {
+
+    let icon = document.getElementById("likeInBox");
+    let likes = icon.getAttribute("class");
+    let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
+    icon.setAttribute("class", newClassLikes)
 }
