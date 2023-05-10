@@ -19,7 +19,7 @@ function createPost(){
         }
     })
 }
-
+// git nhu cc
 
 function getUser() {
     $.ajax({
