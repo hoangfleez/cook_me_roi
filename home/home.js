@@ -1,5 +1,118 @@
-function showForm(){
+function getPost(id){
+
+}
+
+function addFriend(id){
+  $.ajax({
+    type: 'POST',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        alert(data);
+        getWaitList()
+      }
+    })
+}
+
+function confirmFriend(id){
+  $.ajax({
+    type: 'PATCH',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        getWaitList()
+      }
+    })
+}
+
+function removeFriend(id){
+  $.ajax({
+    type: 'DELETE',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        getWaitList()
+      }
+    })
+}
+
+function getWaitList(){
+  $.ajax({
+    type: 'GET',
+      url:`http://localhost:3000/friend/wait`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      }, 
+      success(data){
+        let waitList = ``
+        data.map(item=>{
+          waitList+=`
+          <div class="content">
+              <div class="content-img">
+                  <img src="${item.user.avatar}"alt="">
+              </div>
+              <div style="margin:10px ">
+                  <p>${item.user.name}</p>
+              </div>
+              <div class="button">
+                  <div class="confirm" onclick="confirmFriend(${item.id})" >Đồng ý</div>
+                  <div class="no" onclick="removeFriend(${item.id})">Đéo</div>
+              </div>
+              </div>
+          `
+        })
+
+        $.ajax({
+          type: 'GET',
+          url:`http://localhost:3000/friend/not`,
+          headers:{
+            "Content-Type": "application/json",
+            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+          },
+          success(data){
+              let listNot =``
+               data.map(item=>{
+                  listNot+=` 
+                  <div class="content">
+                  <div class="content-img">
+                      <img src="${item.avatar}"
+                           alt="">
+                  </div>
+                  <div style="margin:10px ">
+                      <p>${item.name}</p>
+                  </div>
+                  <div>
+                      <div class="send" onclick="addFriend(${item.id})">Gửi lời mời</div>
+                      <div class="no">éo</div>
+                  </div>
+              </div>`;
+              showFriend(waitList,listNot)
+               })
+          }
+        })
+
+        
+      }
+  })
+}
+
+
+function showFriend(waitList,listNot){
   let html=` <body>
+  <div> <link rel="stylesheet" href="frend.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.0/css/all.css"/>
+        <link rel="stylesheet" href="./frend/frend.css" />
+  </div>
   <nav>
     <div class="nav-center">
       <ul>
@@ -12,7 +125,7 @@ function showForm(){
     </div>
     <div class="nav-left">
       <div class="nav-left-inner">
-        <a href=""><i class="fa-brands fa-facebook"></i></a>
+        <a onclick="getUser()"><i class="fa-brands fa-facebook"></i></a>
         <div class="search">
           <i class="fa-regular fa-magnifying-glass"></i>
           <input type="search" placeholder="Tìm kiếm ..." />
@@ -54,7 +167,7 @@ function showForm(){
       </div>
       <!-- -------------------settings-menu----------------------- -->
       <div class="settings-menu">
-        <div id="dark-btn">
+        <div id="dark-btn" onclick="changeBackground()">
           <span></span>
         </div>
         <div class="settings-menu-inner">
@@ -104,7 +217,7 @@ function showForm(){
           </div>
           <div class="settings-links">
             <div class="settings-links-left">
-              <div class="settings-links-left-icon">
+              <div class="settings-links-left-icon" onclick="showFormLogin()" >
                 <i class="fa-solid fa-right-from-bracket"></i>
               </div>
               <span>Log out</span>
@@ -179,85 +292,10 @@ function showForm(){
               <div>
                   <h1>Lời mời kết bạn</h1>
               </div>
-              <div style="display: flex;flex-wrap: wrap; column-gap: 10px">
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div class="button">
-                          <div class="confirm">Đồng ý</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
+              <div style="display: flex;flex-wrap: wrap">
+              ${waitList}
+          
+                 
               </div>
           </div>
 
@@ -265,118 +303,42 @@ function showForm(){
               <div style="padding: 10px">
                       <h2>Những người bạn có thể biết!</h2>
                   </div>
-              <div style="display: flex;flex-wrap: wrap;column-gap: 10px">
-                  <div class="content">
-                          <div class="content-img">
-                              <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                                   alt="">
-                          </div>
-                          <div style="margin:10px ">
-                              <p>Name</p>
-                          </div>
-                          <div>
-                              <div class="send">Gửi lời mời</div>
-                              <div class="no">Đéo</div>
-                          </div>
-                      </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-                  <div class="content">
-                      <div class="content-img">
-                          <img src="https://happyshop.com.vn/wp-content/uploads/2019/09/do-lot-bikini-sexy-den-DL487-6.jpg"
-                               alt="">
-                      </div>
-                      <div style="margin:10px ">
-                          <p>Name</p>
-                      </div>
-                      <div>
-                          <div class="send">Gửi lời mời</div>
-                          <div class="no">Đéo</div>
-                      </div>
-                  </div>
-
+              <div style="display: flex;flex-wrap: wrap">
+              ${listNot}
               </div>
           </div>
 
       </div>
   </div>
   <script src="scrip.js"></script>
-</body>`
+</body>`;
+$("#body").html(html);
 
+}
+
+function settingsMenuToggle() {
+  const settingsmenu = document.querySelector(".settings-menu");
+  settingsmenu.classList.toggle("settings-menu-height");
+}
+
+function changeBackground(){
+  const darkBtn = document.getElementById("dark-btn");
+  darkBtn.classList.toggle("dark-btn-on");
+  document.body.classList.toggle("dark-theme");
+  if (localStorage.getItem("theme") == "light") {
+    localStorage.setItem("theme", "dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
+}
+
+
+if (localStorage.getItem("theme") == "light") {
+  darkBtn.classList.remove("dark-btn-on");
+  document.body.classList.remove("dark-theme");
+} else if (localStorage.getItem("theme") == "dark") {
+  darkBtn.classList.add("dark-btn-on");
+  document.body.classList.add("dark-theme");
+} else {
+  localStorage.setItem("theme", "light");
 }

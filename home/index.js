@@ -1,7 +1,26 @@
+
+
 function createPost(){
-
+  let postContent = $('#postContent').val();
+  let postImage = $(`#image`).val()
+  let post = {
+      postContent:postContent,
+      postImage:postImage
+  }
+  $.ajax({
+      type:'POST',
+      url:`http://localhost:3000/post`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },
+      data: JSON.stringify(post),
+      success:()=>{
+        closeCommentBox()
+          getUser()
+      }
+  })
 }
-
 
 function getUser(){
   $.ajax({
@@ -28,6 +47,7 @@ function getUser(){
                             'Authorization':  'Bearer ' + localStorage.getItem('authorization')
                         },
                         success(postList){
+                            console.log(postList)
                           let posts=``
                           postList.map(item => {
                             posts+=`<div class="posts">
@@ -64,10 +84,10 @@ function getUser(){
                             </div>
                             <div class="posts-bottom" >
                               <div class="posts-bottom-like" onclick="like(${item.id})">
-                                <i class="fa-light fa-thumbs-up" id="icon-like"></i>
+                                <i class="fa-light fa-thumbs-up" id="like-${item.id}"></i>
                                 <span>100</span>
                               </div>
-                              <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id}.)">
+                              <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id})">
                                 <i class="fa-regular fa-message"></i>
                                 <span> 0 </span>
                               </div>
@@ -93,8 +113,6 @@ function getUser(){
 
 
 function showHomePage(user, friendList,posts) {
-  console.log(user);
-  console.log(friendList);
   let friendHtml=``
   friendList.map(item=>{
     friendHtml+=`<div class="user">
@@ -218,7 +236,7 @@ function showHomePage(user, friendList,posts) {
        </div>
        <div class="settings-links">
          <div class="settings-links-left">
-           <div class="settings-links-left-icon">
+           <div class="settings-links-left-icon" onclick="showFormLogin()">
              <i class="fa-solid fa-right-from-bracket"></i>
            </div>
            <span>Log out</span>
@@ -322,7 +340,7 @@ function showHomePage(user, friendList,posts) {
                 <i class="fa-light fa-thumbs-up" id="likeInBox"></i>
                 <span>100</span>
               </div>
-              <div class="posts-bottom-cmt" id="comment" onclick="showCommentBox()">
+              <div class="posts-bottom-cmt" id="comment" onclick="createComment()">
                 <i class="fa-regular fa-message"></i>
                 <span>2</span>
               </div>
@@ -358,12 +376,12 @@ function showHomePage(user, friendList,posts) {
           </div>
           <div class="comment">
             <textarea
-              id=""
+              id="commentContent"
               placeholder="Viết bình luận ..."
               required
               height()
             ></textarea>
-            <div class="send"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
+            <div class="send" onclick="createComment()"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
           </div>
         </div>
       </div>
@@ -373,7 +391,7 @@ function showHomePage(user, friendList,posts) {
  <!-- -----------------left-sidebar------------------- -->
  <div class="left-sidebar">
    <div class="imp-links">
-     <div class="imp-links-frend" onclick="showFriend()">
+     <div class="imp-links-frend" onclick="getWaitList()">
        <i
          class="fa-duotone fa-user-group"
          style="--fa-primary-color: #3974db; --fa-secondary-color: #23cbe1"
@@ -559,37 +577,14 @@ function uploadImage(e) {
 }
 
 
-function settingsMenuToggle() {
-  const settingsmenu = document.querySelector(".settings-menu");
-  settingsmenu.classList.toggle("settings-menu-height");
-}
 
-function changeBackground(){
-  const darkBtn = document.getElementById("dark-btn");
-  darkBtn.classList.toggle("dark-btn-on");
-  document.body.classList.toggle("dark-theme");
-  if (localStorage.getItem("theme") == "light") {
-    localStorage.setItem("theme", "dark");
-  } else {
-    localStorage.setItem("theme", "light");
-  }
-}
-
-
-if (localStorage.getItem("theme") == "light") {
-  darkBtn.classList.remove("dark-btn-on");
-  document.body.classList.remove("dark-theme");
-} else if (localStorage.getItem("theme") == "dark") {
-  darkBtn.classList.add("dark-btn-on");
-  document.body.classList.add("dark-theme");
-} else {
-  localStorage.setItem("theme", "light");
-}
 
 // like comment
-function like(id){
-  let icon = document.getElementById(id);
-  let likes = icon.getAttribute(id);
+
+function like(idPost){
+
+  let icon = document.getElementById(`like-${idPost}`);
+  let likes = icon.getAttribute("class");
   let newClassLikes = (likes === 'fa-light fa-thumbs-up') ? 'fa-solid fa-thumbs-up' : 'fa-light fa-thumbs-up'
   icon.setAttribute("class", newClassLikes)
 }
