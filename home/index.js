@@ -1,5 +1,25 @@
 
 
+function createCmt(id){
+  let content = $("#comment-content").val();
+  console.log(content);
+  let comment={
+    content:content
+  }
+  $.ajax({
+    type:'POST',
+    url:`http://localhost:3000/comment?id=${id}`,
+    headers:{
+        "Content-Type": "application/json",
+        'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+    },data: JSON.stringify(comment),
+    success(data){
+      alert(data.message);
+      showCommentBox(id);
+    }
+})
+}
+
 function createPost(){
   let postContent = $('#postContent').val();
   let postImage = $(`#image`).val()
@@ -533,78 +553,88 @@ function showCommentBox(id){
                   </div>
                     `
                   })
-
-           $("#body-post").html(`
-           <div class="top">
-           <div class="top-titel">Bài viết của ${data[0].user.name} </div>
-           <div class="top-close" onclick="closeCommentBox()">
-             <i class="fa-duotone fa-circle-xmark"></i>
-           </div>
-         </div>
-         <div class="center">
-           <div class="posts">
-             <div class="posts-top">
-               <div class="posts-top-user">
-                 <img
-                   src="${data[0].user.avatar}"
-                   alt=""
-                 />
-                 <div class="posts-top-user-name">
-                   <a href=""><span>${data[0].user.name}</span></a>
-                   <a href=""
-                     ><small
-                       >Public <i class="fa-solid fa-earth-americas"></i></small
-                   ></a>
-                 </div>
-               </div>
-               <div class="posts-top-ntm">
-                 <i class="fa-solid fa-ellipsis"></i>
-               </div>
-             </div>
-             <div class="posts-main">
-               <div class="posts-main-text">
-                 <span
-                   >
-                   ${data[0].postContent}
-         
-                 </span>
-               </div>
-               <div class="posts-main-img">
-                 <img
-                   src="${data[0].postImage}"
-                   alt=""
-                 />
-               </div>
-             </div>
-           </div>
-                ${listComment}
-         </div>
-         <div class="bottom">
-           <div class="avata">
-             <img
-               src="https://toigingiuvedep.vn/wp-content/uploads/2022/01/anh-meo-cute.jpg"
-               alt=""
-             />
-           </div>
-           <div class="comment">
-             <textarea
-               id="commentContent"
-               placeholder="Viết bình luận ..."
-               required
-               height()
-             ></textarea>
-             <div class="send" onclick="createComment()"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
-           </div>
-         </div>`)
-    }
+                    $.ajax({
+                        type:'GET',
+                        url:`http://localhost:3000/auth/home`,
+                        headers:{
+                            "Content-Type": "application/json",
+                            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+                            },success(user){
+                              $("#body-post").html(`
+                              <div class="top">
+                              <div class="top-titel">Bài viết của ${data[0].user.name} </div>
+                              <div class="top-close" onclick="closeCommentBox()">
+                                <i class="fa-duotone fa-circle-xmark"></i>
+                              </div>
+                            </div>
+                            <div class="center">
+                              <div class="posts">
+                                <div class="posts-top">
+                                  <div class="posts-top-user">
+                                    <img
+                                      src="${data[0].user.avatar}"
+                                      alt=""
+                                    />
+                                    <div class="posts-top-user-name">
+                                      <a href=""><span>${data[0].user.name}</span></a>
+                                      <a href=""
+                                        ><small
+                                          >Public <i class="fa-solid fa-earth-americas"></i></small
+                                      ></a>
+                                    </div>
+                                  </div>
+                                  <div class="posts-top-ntm">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                  </div>
+                                </div>
+                                <div class="posts-main">
+                                  <div class="posts-main-text">
+                                    <span
+                                      >
+                                      ${data[0].postContent}
+                            
+                                    </span>
+                                  </div>
+                                  <div class="posts-main-img">
+                                    <img
+                                      src="${data[0].postImage}"
+                                      alt=""
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                                   ${listComment}
+                            </div>
+                            <div class="bottom">
+                              <div class="avata">
+                                <img
+                                  src="${user[0].avatar}"
+                                  alt=""
+                                />
+                              </div>
+                              <div class="comment">
+                                <textarea
+                                  id="comment-content"
+                                  placeholder="Viết bình luận ..."
+                                  required
+                                  height()
+                                ></textarea>
+                                <div onclick="createCmt(${data[0].id})"><i class="fa-solid fa-paper-plane-top fa-xl" ></i></div>
+                              </div>
+                            </div>`)
+                            }
+                    })
+                }
           })
       }
   })
-
- 
   open.style.display = "block"
   nav.style.overflowY = "hidden"
 }
+
+
+
+
 
 function closeCommentBox(){
   let open = document.querySelector(".comment-box");
