@@ -223,7 +223,6 @@ $(document).ready(function () {
       name: name,
       gender: gender,
     };
-    if(email.trim()!==""){
       $.ajax({
         type: "POST",
         url: "http://localhost:3000/auth/",
@@ -233,13 +232,13 @@ $(document).ready(function () {
         data: JSON.stringify(user),
         success: function (data) {
           console.log(data);
-
-            $("#emailRegister-err").text(data.messages).css("color", "red")
+            $("#emailRegister-err").text("Tài khoản đã tồn tại").css("color", "red")
             $("#exampleModal").modal("hide");
-          
         },
-    
       });
-    }
+
   })
+
+
+
 });

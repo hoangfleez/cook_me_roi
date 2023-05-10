@@ -22,9 +22,7 @@ pwEyeRegister.onclick = () => {
     pwEyeRegister.setAttribute('class', newClassEye)
 }
 
-checkNameRegister = () => {
-    
-}
+
 
 // // validate
 // let myInput = document.getElementById("psw");

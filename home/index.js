@@ -12,6 +12,7 @@ function changeLikePost(id) {
 }
 
 
+
 function getUser() {
     $.ajax({
         type: 'GET',
@@ -162,7 +163,7 @@ function unLike(id, length) {
 
 function showHomePage(user, friendList, posts) {
     console.log(user);
-    console.log(friendList);
+    // console.log(friendList);
     let friendHtml = ``
     friendList.map(item => {
         friendHtml += `<div class="user">
@@ -544,7 +545,7 @@ function showHomePage(user, friendList, posts) {
    ${posts}
     
    </div>
- </div>'
+ </div>
 
  <!-- -----------------right-sidebar------------------- -->
  <div class="right-sidebar">
