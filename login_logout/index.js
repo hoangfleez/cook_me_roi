@@ -231,9 +231,15 @@ $(document).ready(function () {
         },
         data: JSON.stringify(user),
         success: function (data) {
-          console.log(data);
-            $("#emailRegister-err").text("Tài khoản đã tồn tại").css("color", "red")
-            $("#exampleModal").modal("hide");
+          console.log(data,111111);
+          if (data == "tao oke") {
+            window.$("#exampleModal").modal("hide")
+
+          } else if (data == "tai khoan da ton tai !") {
+            $("#emailRegister-err").text(data).css("color", "red")
+          }
+
+
         },
       });
 

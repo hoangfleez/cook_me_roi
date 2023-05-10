@@ -64,7 +64,6 @@ function getUser() {
                                     let posts = ``;
 
                                     postList.map(item => {
-                                        console.log(item,1111111112)
                                         posts += `<div class="posts">
                             <div class="posts-top">
                               <div class="posts-top-user">
