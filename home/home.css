@@ -530,7 +530,7 @@ nav .post-box-bottom {
   width: 38vw;
   height: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   flex-wrap: nowrap;
 }
 .body .main-content .post-container .posts {
