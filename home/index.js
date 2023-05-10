@@ -635,14 +635,14 @@ function showCommentBox(id){
                                   alt=""
                                 />
                               </div>
-                              <div class="comment">
+                              <div class="comment" style="display: flex; align-items: center">
                                 <textarea
                                   id="comment-content"
                                   placeholder="Viết bình luận ..."
                                   required
                                   height()
                                 ></textarea>
-                                <div onclick="createCmt(${data[0].id})"><i class="fa-solid fa-paper-plane-top fa-xl" ></i></div>
+                                <div  onclick="createCmt(${data[0].id})"><i class="fa-solid fa-paper-plane-top fa-xl" ></i></div>
                               </div>
                             </div>`)
                         }
