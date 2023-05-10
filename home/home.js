@@ -1,55 +1,57 @@
+
+
 function addFriend(id){
-    $.ajax({
-        type: 'POST',
-        url:`http://localhost:3000/friend?id=${id}`,
-        headers:{
-            "Content-Type": "application/json",
-            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-        },success(data){
-            alert(data);
-            getWaitList()
-        }
+  $.ajax({
+    type: 'POST',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        alert(data);
+        getWaitList()
+      }
     })
 }
 
 function confirmFriend(id){
-    $.ajax({
-        type: 'PATCH',
-        url:`http://localhost:3000/friend?id=${id}`,
-        headers:{
-            "Content-Type": "application/json",
-            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-        },success(data){
-            getWaitList()
-        }
+  $.ajax({
+    type: 'PATCH',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        getWaitList()
+      }
     })
 }
 
 function removeFriend(id){
-    $.ajax({
-        type: 'DELETE',
-        url:`http://localhost:3000/friend?id=${id}`,
-        headers:{
-            "Content-Type": "application/json",
-            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-        },success(data){
-            getWaitList()
-        }
+  $.ajax({
+    type: 'DELETE',
+      url:`http://localhost:3000/friend?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },success(data){
+        getWaitList()
+      }
     })
 }
 
 function getWaitList(){
-    $.ajax({
-        type: 'GET',
-        url:`http://localhost:3000/friend/wait`,
-        headers:{
-            "Content-Type": "application/json",
-            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-        },
-        success(data){
-            let waitList = ``
-            data.map(item=>{
-                waitList+=`
+  $.ajax({
+    type: 'GET',
+      url:`http://localhost:3000/friend/wait`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      }, 
+      success(data){
+        let waitList = ``
+        data.map(item=>{
+          waitList+=`
           <div class="content">
               <div class="content-img">
                   <img src="${item.user.avatar}"alt="">
@@ -63,19 +65,19 @@ function getWaitList(){
               </div>
               </div>
           `
-            })
+        })
 
-            $.ajax({
-                type: 'GET',
-                url:`http://localhost:3000/friend/not`,
-                headers:{
-                    "Content-Type": "application/json",
-                    'Authorization':  'Bearer ' + localStorage.getItem('authorization')
-                },
-                success(data){
-                    let listNot =``
-                    data.map(item=>{
-                        listNot+=` 
+        $.ajax({
+          type: 'GET',
+          url:`http://localhost:3000/friend/not`,
+          headers:{
+            "Content-Type": "application/json",
+            'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+          },
+          success(data){
+              let listNot =``
+               data.map(item=>{
+                  listNot+=` 
                   <div class="content">
                   <div class="content-img">
                       <img src="${item.avatar}"
@@ -86,22 +88,22 @@ function getWaitList(){
                   </div>
                   <div>
                       <div class="send" onclick="addFriend(${item.id})">Gửi lời mời</div>
-                      <div class="no">éo</div>
+                      <div class="no" onclick="removeFriend(${item.id})">éo</div>
                   </div>
               </div>`;
-                        showFriend(waitList,listNot)
-                    })
-                }
-            })
+              showFriend(waitList,listNot)
+               })
+          }
+        })
 
-
-        }
-    })
+        
+      }
+  })
 }
 
 
 function showFriend(waitList,listNot){
-    let html=` <body>
+  let html=` <body>
   <div> <link rel="stylesheet" href="frend.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -308,33 +310,33 @@ function showFriend(waitList,listNot){
   </div>
   <script src="scrip.js"></script>
 </body>`;
-    $("#body").html(html);
+$("#body").html(html);
 
 }
 
 function settingsMenuToggle() {
-    const settingsmenu = document.querySelector(".settings-menu");
-    settingsmenu.classList.toggle("settings-menu-height");
+  const settingsmenu = document.querySelector(".settings-menu");
+  settingsmenu.classList.toggle("settings-menu-height");
 }
 
 function changeBackground(){
-    const darkBtn = document.getElementById("dark-btn");
-    darkBtn.classList.toggle("dark-btn-on");
-    document.body.classList.toggle("dark-theme");
-    if (localStorage.getItem("theme") == "light") {
-        localStorage.setItem("theme", "dark");
-    } else {
-        localStorage.setItem("theme", "light");
-    }
+  const darkBtn = document.getElementById("dark-btn");
+  darkBtn.classList.toggle("dark-btn-on");
+  document.body.classList.toggle("dark-theme");
+  if (localStorage.getItem("theme") == "light") {
+    localStorage.setItem("theme", "dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
 }
 
 
 if (localStorage.getItem("theme") == "light") {
-    darkBtn.classList.remove("dark-btn-on");
-    document.body.classList.remove("dark-theme");
+  darkBtn.classList.remove("dark-btn-on");
+  document.body.classList.remove("dark-theme");
 } else if (localStorage.getItem("theme") == "dark") {
-    darkBtn.classList.add("dark-btn-on");
-    document.body.classList.add("dark-theme");
+  darkBtn.classList.add("dark-btn-on");
+  document.body.classList.add("dark-theme");
 } else {
-    localStorage.setItem("theme", "light");
+  localStorage.setItem("theme", "light");
 }
