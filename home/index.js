@@ -87,7 +87,7 @@ function getUser(){
                                 <i class="fa-light fa-thumbs-up" id="like-${item.id}"></i>
                                 <span>100</span>
                               </div>
-                              <div class="posts-bottom-cmt" onclick="showCommentBox(${item.id})">
+                              <div class="posts-bottom-cmt" onclick="showCommentBox('${item.id}')">
                                 <i class="fa-regular fa-message"></i>
                                 <span> 0 </span>
                               </div>
@@ -292,99 +292,14 @@ function showHomePage(user, friendList,posts) {
      <span>Đăng</span>
    </div>
  </div>
+
+
+<div id="comment"></div>
+
  <div class="comment-box">
-        <div class="top">
-          <div class="top-titel">Bài viết của ${user.name}</div>
-          <div class="top-close" onclick="closeCommentBox()">
-            <i class="fa-duotone fa-circle-xmark"></i>
-          </div>
+      <div id="body-post">
         </div>
-        <div class="center">
-          <div class="posts">
-            <div class="posts-top">
-              <div class="posts-top-user">
-                <img
-                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-                  alt=""
-                />
-                <div class="posts-top-user-name">
-                  <a href=""><span>bawp dun</span></a>
-                  <a href=""
-                    ><small
-                      >Public <i class="fa-solid fa-earth-americas"></i></small
-                  ></a>
-                </div>
-              </div>
-              <div class="posts-top-ntm">
-                <i class="fa-solid fa-ellipsis"></i>
-              </div>
-            </div>
-            <div class="posts-main">
-              <div class="posts-main-text">
-                <span
-                  >Hôm nay trời đẹp quá
-                  <h1>
-                    asdasadasdasdljsalkjdlajsdlkjasljdlasjdlkjasljdlasjdljasldjasjdljasldjasljdljsaldjasljd
-                  </h1>
-                </span>
-              </div>
-              <div class="posts-main-img">
-                <img
-                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-                  alt=""
-                />
-              </div>
-            </div>
-            <div class="posts-bottom">
-              <div class="posts-bottom-like" onclick="likeInBox()" >
-                <i class="fa-light fa-thumbs-up" id="likeInBox"></i>
-                <span>100</span>
-              </div>
-              <div class="posts-bottom-cmt" id="comment" onclick="createComment()">
-                <i class="fa-regular fa-message"></i>
-                <span>2</span>
-              </div>
-              <div class="posts-bottom-share">
-                <i class="fa-light fa-share"></i>
-                <span>10</span>
-              </div>
-            </div>
-          </div>
-          <div class="comments">
-            <div class="user">
-              <div class="user-avata ">
-                <img
-                  src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="user-name">
-                <h4>bawp dun</h4>
-                <div class="text">
-                  sadsad
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bottom">
-          <div class="avata">
-            <img
-              src="https://toigingiuvedep.vn/wp-content/uploads/2022/01/anh-meo-cute.jpg"
-              alt=""
-            />
-          </div>
-          <div class="comment">
-            <textarea
-              id="commentContent"
-              placeholder="Viết bình luận ..."
-              required
-              height()
-            ></textarea>
-            <div class="send" onclick="createComment()"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
-          </div>
-        </div>
-      </div>
+    </div>
 </nav>
 
 <div class="body">
@@ -577,8 +492,126 @@ function uploadImage(e) {
 }
 
 
+function showCommentBox(id){
+  let open = document.querySelector(".comment-box");
+  let nav = document.getElementById("a");
 
+  $.ajax({
+      type:'GET',
+      url:`http://localhost:3000/post/comment?id=${id}`,
+      headers:{
+          "Content-Type": "application/json",
+          'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+      },
+      success(data){
+          $.ajax({
+            type:'GET',
+            url:`http://localhost:3000/comment/post?id=${id}`,
+            headers:{
+                "Content-Type": "application/json",
+                'Authorization':  'Bearer ' + localStorage.getItem('authorization')
+                }
+                ,success(comments){
+                  let listComment=``
+                  comments.map(item => {
+                    listComment += `
+                    <div class="comments">
+                    <div class="user">
+                      <div class="user-avata ">
+                        <img
+                          src="${item.user.avatar}"
+                          alt=""
+                        />
+                      </div>
+                      <div class="user-name">
+                        <h4>${item.user.name}</h4>
+                        <div class="text">
+                        ${item.content}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    `
+                  })
 
+           $("#body-post").html(`
+           <div class="top">
+           <div class="top-titel">Bài viết của ${data[0].user.name} </div>
+           <div class="top-close" onclick="closeCommentBox()">
+             <i class="fa-duotone fa-circle-xmark"></i>
+           </div>
+         </div>
+         <div class="center">
+           <div class="posts">
+             <div class="posts-top">
+               <div class="posts-top-user">
+                 <img
+                   src="${data[0].user.avatar}"
+                   alt=""
+                 />
+                 <div class="posts-top-user-name">
+                   <a href=""><span>${data[0].user.name}</span></a>
+                   <a href=""
+                     ><small
+                       >Public <i class="fa-solid fa-earth-americas"></i></small
+                   ></a>
+                 </div>
+               </div>
+               <div class="posts-top-ntm">
+                 <i class="fa-solid fa-ellipsis"></i>
+               </div>
+             </div>
+             <div class="posts-main">
+               <div class="posts-main-text">
+                 <span
+                   >
+                   ${data[0].postContent}
+         
+                 </span>
+               </div>
+               <div class="posts-main-img">
+                 <img
+                   src="${data[0].postImage}"
+                   alt=""
+                 />
+               </div>
+             </div>
+           </div>
+                ${listComment}
+         </div>
+         <div class="bottom">
+           <div class="avata">
+             <img
+               src="https://toigingiuvedep.vn/wp-content/uploads/2022/01/anh-meo-cute.jpg"
+               alt=""
+             />
+           </div>
+           <div class="comment">
+             <textarea
+               id="commentContent"
+               placeholder="Viết bình luận ..."
+               required
+               height()
+             ></textarea>
+             <div class="send" onclick="createComment()"><i class="fa-solid fa-paper-plane-top fa-xl"></i></div>
+           </div>
+         </div>`)
+    }
+          })
+      }
+  })
+
+ 
+  open.style.display = "block"
+  nav.style.overflowY = "hidden"
+}
+
+function closeCommentBox(){
+  let open = document.querySelector(".comment-box");
+  let nav = document.getElementById("a");
+  open.style.display = "none"
+  nav.style.overflowY = "auto"
+}
 // like comment
 
 function like(idPost){

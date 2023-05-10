@@ -1,6 +1,4 @@
-function getPost(id){
 
-}
 
 function addFriend(id){
   $.ajax({
@@ -90,7 +88,7 @@ function getWaitList(){
                   </div>
                   <div>
                       <div class="send" onclick="addFriend(${item.id})">Gửi lời mời</div>
-                      <div class="no">éo</div>
+                      <div class="no" onclick="removeFriend(${item.id})">éo</div>
                   </div>
               </div>`;
               showFriend(waitList,listNot)
