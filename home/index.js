@@ -13,8 +13,7 @@ function createCmt(id){
         "Content-Type": "application/json",
         'Authorization':  'Bearer ' + localStorage.getItem('authorization')
     },data: JSON.stringify(comment),
-    success(data){
-      alert(data.message);
+    success(){
       showCommentBox(id);
     }
 })
@@ -50,7 +49,8 @@ function getUser(){
           "Content-Type": "application/json",
           'Authorization':  'Bearer ' + localStorage.getItem('authorization')
       }, 
-      success(data){
+      success(userLogin){
+        console.log("userLogin:", userLogin);
               $.ajax({
                 type: "GET",
                 url:`http://localhost:3000/friend`,
@@ -67,7 +67,7 @@ function getUser(){
                             'Authorization':  'Bearer ' + localStorage.getItem('authorization')
                         },
                         success(postList){
-                            console.log(postList)
+                            console.log("post list:",postList)
                           let posts=``
                           postList.map(item => {
                             posts+=`<div class="posts">
@@ -118,13 +118,8 @@ function getUser(){
                             </div>
                           </div>`
                           })
-                          showHomePage(data[0],friendList,posts);
+                          showHomePage(userLogin[0],friendList,posts);
                         }
-                    
-
-
-
-                      
                   })
               }})
       }
@@ -523,7 +518,7 @@ function showCommentBox(id){
           "Content-Type": "application/json",
           'Authorization':  'Bearer ' + localStorage.getItem('authorization')
       },
-      success(data){
+      success(userPost){
           $.ajax({
             type:'GET',
             url:`http://localhost:3000/comment/post?id=${id}`,
@@ -562,7 +557,7 @@ function showCommentBox(id){
                             },success(user){
                               $("#body-post").html(`
                               <div class="top">
-                              <div class="top-titel">Bài viết của ${data[0].user.name} </div>
+                              <div class="top-titel">Bài viết của ${userPost[0].user.name} </div>
                               <div class="top-close" onclick="closeCommentBox()">
                                 <i class="fa-duotone fa-circle-xmark"></i>
                               </div>
@@ -572,11 +567,11 @@ function showCommentBox(id){
                                 <div class="posts-top">
                                   <div class="posts-top-user">
                                     <img
-                                      src="${data[0].user.avatar}"
+                                      src="${userPost[0].user.avatar}"
                                       alt=""
                                     />
                                     <div class="posts-top-user-name">
-                                      <a href=""><span>${data[0].user.name}</span></a>
+                                      <a href=""><span>${userPost[0].user.name}</span></a>
                                       <a href=""
                                         ><small
                                           >Public <i class="fa-solid fa-earth-americas"></i></small
@@ -591,13 +586,13 @@ function showCommentBox(id){
                                   <div class="posts-main-text">
                                     <span
                                       >
-                                      ${data[0].postContent}
+                                      ${userPost[0].postContent}
                             
                                     </span>
                                   </div>
                                   <div class="posts-main-img">
                                     <img
-                                      src="${data[0].postImage}"
+                                      src="${userPost[0].postImage}"
                                       alt=""
                                     />
                                   </div>
@@ -619,7 +614,7 @@ function showCommentBox(id){
                                   required
                                   height()
                                 ></textarea>
-                                <div onclick="createCmt(${data[0].id})"><i class="fa-solid fa-paper-plane-top fa-xl" ></i></div>
+                                <div onclick="createCmt(${userPost[0].id})"><i class="fa-solid fa-paper-plane-top fa-xl" ></i></div>
                               </div>
                             </div>`)
                             }
